@@ -1,73 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/iitg_logo.jpg";
 
 function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { to: "/", label: "Home" },
+    { to: "/research", label: "Research" },
+    { to: "/teaching", label: "Teaching" },
+    { to: "/resume", label: "Resume" },
+    { to: "/MID-lab", label: "MID Lab" },
+    { to: "/publications", label: "Publications" },
+    { to: "/patents", label: "Patents" },
+    { to: "/outreach", label: "Outreach" },
+    { to: "/computational-tools", label: "Computational Tools" },
+  ];
+
   return (
-    <nav className="min-w-full px-8 py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-200">
+    <nav className="w-full px-4 md:px-8 py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-200 z-50 relative">
       <div className="flex items-center h-14">
-        <img 
-          src={Logo} 
-          alt="Logo" 
-          className="h-full w-auto max-w-[200px] object-contain" 
+        <img
+          src={Logo}
+          alt="Logo"
+          className="h-full w-auto max-w-[200px] object-contain"
         />
       </div>
-      <div className="flex gap-8 items-center">
-        <Link 
-          to="/" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+      {/* Hamburger mobile menu button */}
+      <button
+        className="ml-auto md:hidden p-2 text-gray-700 focus:outline-none"
+        aria-label="Toggle Navigation"
+        onClick={() => setMenuOpen((o) => !o)}
+      >
+        <svg
+          className="w-7 h-7"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          Home
-        </Link>
-        <Link 
-          to="/research" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Research
-        </Link>
-        <Link 
-          to="/teaching" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Teaching
-        </Link>
-        <Link 
-          to="/resume" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Resume
-        </Link>
-        <Link 
-          to="/MID-lab" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          MID Lab
-        </Link>
-        <Link 
-          to="/publications" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Publications
-        </Link>
-        <Link 
-          to="/patents" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Patents
-        </Link>
-        <Link 
-          to="/outreach" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Outreach
-        </Link>
-        <Link 
-          to="/computational-tools" 
-          className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-        >
-          Computational Tools
-        </Link>
+          {menuOpen ? (
+            // X close icon
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          ) : (
+            // Hamburger icon
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          )}
+        </svg>
+      </button>
+      {/* Desktop Nav */}
+      <div className="hidden md:flex gap-8 items-center">
+        {navLinks.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+          >
+            {link.label}
+          </Link>
+        ))}
       </div>
+      {/* Mobile dropdown menu */}
+      {menuOpen && (
+        <div className="absolute left-0 top-full w-full bg-white shadow-md border-b border-gray-200 block md:hidden z-50">
+          <div className="flex flex-col py-4 gap-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMenuOpen(false)}
+                className="py-2 px-8 text-gray-700 hover:text-blue-700 font-medium transition-colors duration-200"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
