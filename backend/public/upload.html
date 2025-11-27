@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+        .preview {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+        .preview img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Profile Image</h1>
+    <div class="upload-container">
+        <input type="file" id="fileInput" accept="image/*">
+        <br>
+        <button onclick="uploadImage()">Upload Image</button>
+    </div>
+    
+    <div id="result" class="result" style="display:none;">
+        <h3>Upload Successful!</h3>
+        <p><strong>Image URL:</strong></p>
+        <input type="text" id="imageUrl" readonly style="width: 100%; padding: 10px;">
+        <button onclick="copyUrl()" style="margin-top: 10px; background: #2196F3;">Copy URL</button>
+    </div>
+
+    <div id="preview" class="preview" style="display:none;">
+        <h3>Preview:</h3>
+        <img id="previewImg" src="" alt="Preview">
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select an image first!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('imageUrl').value = data.url;
+                    
+                    document.getElementById('preview').style.display = 'block';
+                    document.getElementById('previewImg').src = data.url;
+                } else {
+                    alert('Upload failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Upload error: ' + error.message);
+            }
+        }
+
+        function copyUrl() {
+            const urlInput = document.getElementById('imageUrl');
+            urlInput.select();
+            document.execCommand('copy');
+            alert('URL copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

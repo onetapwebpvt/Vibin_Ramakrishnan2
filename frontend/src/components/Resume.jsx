@@ -1,310 +1,288 @@
-import React from "react";
-
-// Dummy data for demonstration. Replace with AdminJS/API data as needed.
-const profileImage = "/images/vibin-profile.jpg";
-const resumePDF = "/resume/vibin-ramakrishnan-resume.pdf";
-
-const resumeData = {
-  name: "Vibin Ramakrishnan",
-  title: "Professor",
-  departments: [
-    "Department of Biosciences & Bioengineering, IIT Guwahati",
-    "Mehta Family School of Data Science & Artificial Intelligence",
-  ],
-  contact: {
-    email: "vibin@iitg.ac.in",
-    phone: "+91-361-258 2227",
-    url: "https://fac.iitg.ac.in/vibin/"
-  },
-  pdf: "/resume/vibin-ramakrishnan-resume.pdf",
-  education: [
-    {
-      degree: "Ph.D.",
-      field: "Computational Biology, Biophysics",
-      institution: "IIT Bombay",
-      year: "1999 - 2004"
-    },
-    {
-      degree: "M.Sc.",
-      field: "Applied Chemistry",
-      institution: "Cochin University of Science and Technology",
-      year: "1996 - 1998"
-    }
-  ],
-  positions: [
-    { title: "Professor", place: "IIT Guwahati", years: "2019 - present" },
-    { title: "Associate Professor", place: "IIT Guwahati", years: "2015 - 2019" },
-    { title: "Assistant Professor", place: "IIT Guwahati", years: "2011 - 2015" },
-    { title: "Faculty Scientist/IYBA Fellow", place: "IBAB Bangalore & RGCB Thiruvananthapuram", years: "2007 - 2010" },
-    { title: "Post-Doctoral Research Associate", place: "Rensselaer Polytechnic Institute, Troy NY, USA", years: "2006 - 2007" }
-  ],
-  researchInterests: [
-    "Bio-nanotechnology",
-    "Drug Delivery Vehicles",
-    "Network medicine",
-    "Peptide based antibiotics",
-    "Computational Biology",
-  ],
-  awards: [
-    "Innovative Young Biotechnologist Award (IYBA 2011-12), Ministry of Science and Technology",
-    "Innovative Young Biotechnologist Award (IYBA 2007-08), Ministry of Science and Technology",
-    "Post-Doctoral Fellowship, National Science Foundation, US",
-    "Institute Research Fellowship, IIT Bombay",
-    "CSIR-UGC Test, Graduate Aptitude Test in Engg. (GATE)"
-  ],
-  editorial: [
-    {
-      title: "Scientific Reports",
-      journalImage: "/images/scientific-reports-logo.png", // replace with actual logo path/admin field
-      publisher: "Nature Publishing Group, Springer Nature",
-      since: "2018 onwards",
-      impact: "4.996",
-    },
-    {
-      title: "Journal of Controlled Release",
-      journalImage: "/images/jcr-logo.jpg",
-      publisher: "Elsevier",
-      since: "2021 onwards",
-      impact: "11.47",
-    },
-  ],
-  teaching: [
-    {
-      section: "Department of Biosciences and Bioengineering",
-      undergraduate: [
-        "BT 101 Modern Biology",
-        "BT 205 Biophysics",
-        "BT 301 Bioinformatics and Computational Biology",
-        "BT 310 Bioinformatics and Computational Biology Laboratory",
-        "BT 305 Computational Biology",
-      ],
-      graduate: [
-        "BT 601 Analytical Biotechnology",
-        "BT 501 Biotechniques",
-        "BT 510 Bio-techniques Laboratory",
-        "BT 617 Concepts and Methods in Proteomics",
-      ],
-    },
-    {
-      section: "Mehta Family School of Data Science & Artificial Intelligence",
-      undergraduate: ["DA 461 Bioinformatics"],
-      graduate: [],
-    },
-  ],
-  patents: [
-    {
-      title: "A device for non-invasive treatment of neurodegenerative diseases.",
-      inventors: "Vibin Ramakrishnan, Gaurav Pandey, Harshal B. Nemade, Jahnu Saikia, Sajitha S, & Nitin Chaudhary",
-      patentNo: "WO/2019/012556",
-      status: "Published",
-    },
-    {
-      title: "Generation and usage of Di-Histidine based stimulus responsive nanostructures",
-      inventors: "Vibin Ramakrishnan, Sajitha S, Nitin Chaudhary & Gaurav Pandey",
-      patentNo: "243/KOL/2015",
-      status: "Published",
-    },
-  ],
-  selectedPublications: [
-    {
-      id: 1,
-      title: "Delivery of Small Molecules by Syndiotactic Peptides for Breast Cancer Therapy.",
-      authors: "Gaurav Jerath, Pramod Darvin, Yvonne Christian, Vishal Trivedi, T. R. Santhosh Kumar, Vibin Ramakrishnan",
-      venue: "Molecular Pharmaceutics",
-      year: 2022,
-      doi: "acs.molpharmaceut.2c00238",
-      publisher: "ACS Publications"
-    },
-    {
-      id: 2,
-      title: "Anisotropic Ferromagnetic Organic Nanoflowers.",
-      authors: "Sajitha Sasidharan, Sayandeep Ghosh, Rishi Sreedhar, Kalpana Kumari, Subhash Thota, Vibin Ramakrishnan",
-      venue: "Journal of Physical Chemistry C",
-      year: 2022,
-      doi: "10.1021/acs.jpcc.2c01462",
-      publisher: "ACS Publications"
-    },
-    {
-      id: 3,
-      title: "Geometry Encoded Functional Programming of Tumor Homing Peptides for Targeted Drug Delivery",
-      authors: "Ruchika Goyal, Gaurav Jerath, Akhil R., Aneesh Chandrasekharan, Eswara Rao Puppala, Srikanth Ponneganti, Anupam Sarma, V.G.M. Naidu, T. R. Santhoshkumar, Vibin Ramakrishnanan",
-      venue: "Journal of Controlled Release",
-      year: 2021,
-      doi: "10.1016/j.jconrel.2021.03.0101",
-      publisher: "Elsevier"
-    }
-  ]
-};
+import React, { useState, useEffect } from "react";
 
 const SectionHeading = ({ children }) => (
   <h2 className="text-2xl md:text-3xl font-bold text-green-700 mt-10 mb-4">{children}</h2>
 );
 
-const Resume = () => (
-  <div className="w-full bg-white min-h-screen">
-    <div className="w-full flex justify-center py-8 px-2 md:px-0">
-      <div className="w-full max-w-[1400px] px-4 md:px-12 lg:px-24">
-        {/* Hero Section */}
-        <div className="flex flex-col md:flex-row md:items-center gap-12 pb-8">
-          <div className="mx-auto md:mx-0 flex-shrink-0">
-            <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg border-4 border-green-300 bg-white flex items-center justify-center">
-              <img src={profileImage} alt={resumeData.name} className="w-full h-full object-cover"/>
-            </div>
+const Resume = () => {
+  const [resumeData, setResumeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/resume')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch resume data');
+        return res.json();
+      })
+      .then(data => {
+        setResumeData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching resume data:', err);
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading resume...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <p className="text-red-600">Error: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!resumeData || !resumeData.profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <p className="text-gray-600">No resume data available</p>
+          <p className="text-sm text-gray-500 mt-2">Please add resume data in the admin panel</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { profile, education, positions, researchInterests, awards, editorials, patents, selectedPublications } = resumeData;
+
+  return (
+<div className="w-full bg-white min-h-screen">
+  <div className="max-w-4xl mx-auto py-12 px-6">
+    
+    {/* Hero Section */}
+    <div className="flex items-start gap-10 mb-10 pb-8 border-b border-gray-200">
+      <div className="flex-shrink-0">
+        <div className="w-40 h-40 rounded-full overflow-hidden shadow-lg border-4 border-green-300 bg-white">
+          {profile.profileImage ? (
+            <img 
+              src={profile.profileImage} 
+              alt={profile.name} 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/200?text=Profile';
+              }}
+            />
+          ) : (
+            <span className="text-3xl text-green-700 font-bold flex items-center justify-center h-full">
+              {profile.name.charAt(0)}
+            </span>
+          )}
+        </div>
+      </div>
+      
+      <div className="flex-1">
+        <h1 className="text-4xl font-bold text-green-800 mb-2">
+          {profile.name}
+        </h1>
+        <p className="text-lg font-medium text-gray-700 mb-3">{profile.title}</p>
+        
+        {/* Departments */}
+        {profile.departments && (
+          <div className="mb-4">
+            {profile.departments.split(',').map((d, i) => (
+              <p key={i} className="text-base font-medium text-blue-800 leading-relaxed">
+                {d.trim()}
+              </p>
+            ))}
           </div>
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-green-800 mb-2">
-              {resumeData.name}
-            </h1>
-            <p className="text-lg text-gray-600 mb-2">{resumeData.title}</p>
-            {resumeData.departments.map((d,i) =>
-              <div key={i} className="font-semibold text-blue-900">{d}</div>
-            )}
-            <div className="mt-2 text-gray-600 text-sm">
-              <span>Email:</span>{" "}
-              <a href={`mailto:${resumeData.contact.email}`} className="text-blue-700 hover:underline">{resumeData.contact.email}</a>{" | "}
-              <span>Phone: {resumeData.contact.phone}</span>{" | "}
-              <a href={resumeData.contact.url} target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Faculty Page</a>
-            </div>
-            <div className="mt-6">
-              <a href={resumePDF} download className="inline-block bg-green-700 hover:bg-green-800 text-white font-bold px-6 py-3 rounded-lg transition-colors">
-                Download Resume PDF
+        )}
+        
+        <div className="space-y-1 text-base text-gray-700">
+          <p>
+            <span className="font-semibold">Email:</span>{" "}
+            <a href={`mailto:${profile.email}`} className="text-blue-600 hover:underline">
+              {profile.email}
+            </a>
+          </p>
+          <p>
+            <span className="font-semibold">Phone:</span> {profile.phone}
+          </p>
+          {profile.websiteUrl && (
+            <p>
+              <a href={profile.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                Faculty Page →
               </a>
-            </div>
-          </div>
+            </p>
+          )}
         </div>
-
-        {/* Education */}
-        <SectionHeading>Education</SectionHeading>
-        <ul className="mb-4 ml-4 list-disc space-y-1">
-          {resumeData.education.map((e, i) => (
-            <li key={i}>
-              <span className="font-semibold">{e.degree}</span>, {e.field}, {e.institution} ({e.year})
-            </li>
-          ))}
-        </ul>
-
-        {/* Positions/Experience */}
-        <SectionHeading>Positions & Employment</SectionHeading>
-        <ul className="mb-4 ml-4 list-disc space-y-1">
-          {resumeData.positions.map((exp, i) => (
-            <li key={i}>
-              <span className="font-semibold">{exp.title}</span>, {exp.place}
-              <span className="text-gray-500"> ({exp.years})</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* Research Interests */}
-        <SectionHeading>Research Interests</SectionHeading>
-        <ul className="mb-4 ml-4 list-disc space-y-1">
-          {resumeData.researchInterests.map((interest, i) => (
-            <li key={i}>{interest}</li>
-          ))}
-        </ul>
-
-        {/* Awards */}
-        <SectionHeading>Awards & Achievements</SectionHeading>
-        <ul className="mb-4 ml-4 list-disc space-y-1">
-          {resumeData.awards.map((award, i) => (
-            <li key={i}>{award}</li>
-          ))}
-        </ul>
-
-        {/* Editorial Board Memberships */}
-        <SectionHeading>Editorial Board Membership</SectionHeading>
-        {resumeData.editorial.map((e, i) => (
-          <div key={i} className="mb-7">
-            <div className="font-medium">
-              {i + 1}. Editorial Board Member, <span className="font-bold">{e.title}</span>. {e.since}
-            </div>
-            <div className="my-1 text-gray-700">
-              Publisher: <span className="font-bold">{e.publisher}</span>, Impact Factor: <span className="font-semibold">{e.impact}</span>
-            </div>
-            {e.journalImage && <img src={e.journalImage} alt={e.title + " logo"} className="w-56 h-24 object-contain mt-2 mb-4 bg-white shadow rounded" />}
-          </div>
-        ))}
-
-        {/* Teaching */}
-        <SectionHeading>Teaching</SectionHeading>
-        {resumeData.teaching.map((dept, idx) => (
-          <div key={idx} className="mb-4 ml-2">
-            <h3 className="text-lg font-bold mb-2">{dept.section}</h3>
-            {dept.undergraduate.length > 0 && (
-              <>
-                <p className="font-semibold">Undergraduate Courses:</p>
-                <ul className="ml-5 mb-2 list-disc">
-                  {dept.undergraduate.map((course, cid) => (
-                    <li key={cid}>{course}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {dept.graduate.length > 0 && (
-              <>
-                <p className="font-semibold">Graduate Courses:</p>
-                <ul className="ml-5 list-disc">
-                  {dept.graduate.map((course, cid) => (
-                    <li key={cid}>{course}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </div>
-        ))}
-
-        {/* Patents */}
-        <SectionHeading>Patents</SectionHeading>
-        <ul className="mb-4 ml-4 list-disc space-y-1">
-          {resumeData.patents.map((pat, i) => (
-            <li key={i}>
-              <span className="font-semibold">{pat.title}</span><br />
-              <span className="text-gray-700">{pat.inventors}</span><br />
-              Patent No: <span className="font-mono">{pat.patentNo}</span>, Status: {pat.status}
-            </li>
-          ))}
-        </ul>
-
-        {/* Selected Publications */}
-        <SectionHeading>Selected Publications</SectionHeading>
-        <div className="space-y-6">
-          {resumeData.selectedPublications.map(pub => (
-            <article
-              key={pub.id}
-              className="flex gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow duration-200"
+        
+        {profile.resumePDF && (
+          <div className="mt-6">
+            <a 
+              href={profile.resumePDF} 
+              download 
+              className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
             >
-              <div className="w-1 rounded-full bg-blue-500 mt-1" aria-hidden="true" />
-              <div className="flex-1 flex flex-col">
-                <h3 className="text-lg sm:text-xl font-medium text-gray-900 leading-tight">{pub.title}</h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  {pub.authors} • {pub.venue},{" "}
-                  <time dateTime={String(pub.year)}>{pub.year}</time>
-                </p>
-                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className="font-semibold text-gray-700">DOI</span>
-                    <a
-                      href={`https://doi.org/${pub.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline break-all"
-                      aria-label={`Open DOI ${pub.doi}`}
-                    >
-                      {pub.doi}
-                    </a>
-                  </div>
-                  <div className="text-sm text-gray-700">
-                    <span className="font-semibold">Publisher:</span>{" "}
-                    {pub.publisher}
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-        {/* You can add more sections if needed */}
+              Download Resume PDF
+            </a>
+          </div>
+        )}
       </div>
     </div>
+
+    {/* Education */}
+    {education && education.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Education</SectionHeading>
+        <ul className="ml-8 list-disc space-y-2 text-base text-gray-800">
+          {education.map((e) => (
+            <li key={e.id}>
+              <span className="font-semibold">{e.degree}</span>, {e.field}, {e.institution}{" "}
+              <span className="text-gray-600">({e.year})</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Positions */}
+    {positions && positions.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Positions & Employment</SectionHeading>
+        <ul className="ml-8 list-disc space-y-2 text-base text-gray-800">
+          {positions.map((exp) => (
+            <li key={exp.id}>
+              <span className="font-semibold">{exp.title}</span>, {exp.place}{" "}
+              <span className="text-gray-600">({exp.years})</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Research Interests */}
+    {researchInterests && researchInterests.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Research Interests</SectionHeading>
+        <ul className="ml-8 list-disc space-y-1 text-base text-gray-800">
+          {researchInterests.map((interest) => (
+            <li key={interest.id}>{interest.interest}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Awards */}
+    {awards && awards.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Awards & Achievements</SectionHeading>
+        <ul className="ml-8 list-disc space-y-2 text-base text-gray-800">
+          {awards.map((award) => (
+            <li key={award.id}>{award.title}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Editorial Board */}
+    {editorials && editorials.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Editorial Board Membership</SectionHeading>
+        <div className="space-y-5">
+          {editorials.map((e, idx) => (
+            <div key={e.id}>
+              <p className="text-base text-gray-800">
+                {idx + 1}. Editorial Board Member, <span className="font-semibold">{e.journalTitle}</span>. {e.since}
+              </p>
+              <p className="text-sm text-gray-600 mt-1 ml-4">
+                Publisher: <span className="font-medium">{e.publisher}</span>, Impact Factor: <span className="font-medium">{e.impactFactor}</span>
+              </p>
+              {e.journalImage && (
+                <img 
+                  src={e.journalImage} 
+                  alt={e.journalTitle} 
+                  className="w-48 h-20 object-contain mt-2 ml-4"
+                  onError={(e) => e.target.style.display = 'none'}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Patents */}
+    {patents && patents.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Patents</SectionHeading>
+        <ul className="ml-8 list-disc space-y-4 text-base text-gray-800">
+          {patents.map((pat) => (
+            <li key={pat.id}>
+              <p className="font-semibold">{pat.title}</p>
+              <p className="text-sm text-gray-700 mt-1">{pat.inventors}</p>
+              <p className="text-sm text-gray-600 mt-1">
+                Patent No: <span className="font-mono">{pat.patentNo}</span>, Status: {pat.status}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Selected Publications */}
+    {selectedPublications && selectedPublications.length > 0 && (
+      <div className="mb-10">
+        <SectionHeading>Selected Publications</SectionHeading>
+        <div className="space-y-8">
+          {selectedPublications.map(pub => (
+            <div key={pub.id} className="border-l-4 border-blue-500 pl-5">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {pub.title}
+              </h3>
+              <p className="text-base text-gray-700 mb-2">
+                {pub.authors}
+              </p>
+              <p className="text-sm text-gray-600 mb-2">
+                <span className="italic">{pub.venue}</span>, {pub.year}
+              </p>
+              <div className="flex gap-6 text-sm text-gray-700">
+                <p>
+                  <span className="font-semibold">DOI:</span>{" "}
+                  <a
+                    href={`https://doi.org/${pub.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {pub.doi}
+                  </a>
+                </p>
+                <p>
+                  <span className="font-semibold">Publisher:</span> {pub.publisher}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
-);
+</div>
+
+
+  );
+};
 
 export default Resume;

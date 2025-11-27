@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../assets/iitg_logo.jpg";
+import DefaultLogo from "../assets/iitg_logo.jpg";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(DefaultLogo);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/site-settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.logoUrl) {
+          setLogoUrl(data.logoUrl);
+          console.log("Using custom logo URL:", data);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to fetch site settings:', err);
+        // Keep using default logo
+      });
+  }, []);
 
   const navLinks = [
     { to: "/", label: "Home" },
@@ -21,11 +37,16 @@ function Navbar() {
     <nav className="w-full px-4 md:px-8 py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-200 z-50 relative">
       <div className="flex items-center h-14">
         <img
-          src={Logo}
+          src={logoUrl}
           alt="Logo"
-          className="h-full w-auto max-w-[200px] object-contain"
+          className="h-full w-auto max-w-[300px] object-contain"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DefaultLogo; // Fallback to default logo
+          }}
         />
       </div>
+      
       {/* Hamburger mobile menu button */}
       <button
         className="ml-auto md:hidden p-2 text-gray-700 focus:outline-none"
@@ -57,6 +78,7 @@ function Navbar() {
           )}
         </svg>
       </button>
+      
       {/* Desktop Nav */}
       <div className="hidden md:flex gap-8 items-center">
         {navLinks.map((link) => (
@@ -69,6 +91,7 @@ function Navbar() {
           </Link>
         ))}
       </div>
+      
       {/* Mobile dropdown menu */}
       {menuOpen && (
         <div className="absolute left-0 top-full w-full bg-white shadow-md border-b border-gray-200 block md:hidden z-50">

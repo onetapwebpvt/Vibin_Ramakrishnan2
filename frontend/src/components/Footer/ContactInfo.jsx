@@ -1,6 +1,19 @@
 import React from "react";
 
-function ContactInfo() {
+function ContactInfo({ settings }) {
+  // If settings is null or undefined, show nothing or a placeholder
+  if (!settings) {
+    return (
+      <div>
+        <h3 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+          <span className="w-1 h-8 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-full"></span>
+          Contact Information
+        </h3>
+        <p className="text-gray-400">Loading contact information...</p>
+      </div>
+    );
+  }
+
   const contactItems = [
     {
       icon: (
@@ -10,7 +23,8 @@ function ContactInfo() {
         </svg>
       ),
       label: "Office",
-      value: "104, N Block, BSBE",
+      value: settings.footerOffice,
+      show: !!settings.footerOffice
     },
     {
       icon: (
@@ -19,16 +33,8 @@ function ContactInfo() {
         </svg>
       ),
       label: "Phone",
-      value: "+91 361 258 2227, 291 9160",
-    },
-    {
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-        </svg>
-      ),
-      label: "Fax",
-      value: "+91 361 258 2249",
+      value: settings.footerPhone,
+      show: !!settings.footerPhone
     },
     {
       icon: (
@@ -37,10 +43,15 @@ function ContactInfo() {
         </svg>
       ),
       label: "Email",
-      value: "vibin@iitg.ac.in",
-      link: "mailto:vibin@iitg.ac.in",
+      value: settings.footerEmail,
+      link: settings.footerEmail ? `mailto:${settings.footerEmail}` : null,
+      show: !!settings.footerEmail
     },
-  ];
+  ].filter(item => item.show); // Only show items that have values
+
+  if (contactItems.length === 0) {
+    return null; // Don't render section if no contact info available
+  }
 
   return (
     <div>

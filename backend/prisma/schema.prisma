@@ -1,0 +1,412 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Hero Section
+model Hero {
+  id              Int      @id @default(autoincrement())
+  profileImage    String?
+  name            String
+  designation     String
+  departments     String
+  office          String
+  email           String
+  phone           String
+  fax             String
+  websiteUrl      String
+  researchAreas   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// About Section
+model About {
+  id              Int      @id @default(autoincrement())
+  title           String   @default("Academic Profile")
+  content         String   @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Publications
+model Publication {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  authors         String   @db.Text
+  venue           String
+  year            Int
+  doi             String
+  publisher       String
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([year, order])
+}
+
+// News Items
+model News {
+  id              Int      @id @default(autoincrement())
+  date            String
+  text            String   @db.Text
+  link            String
+  summary         String?  @db.Text
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Research Areas
+model Research {
+  id              Int                 @id @default(autoincrement())
+  title           String
+  description     String              @db.Text
+  imageUrl        String?
+  order           Int                 @default(0)
+  isVisible       Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  publications    ResearchPublication[]
+
+  @@index([order])
+}
+
+// Research Publications (linked to Research areas)
+model ResearchPublication {
+  id              Int      @id @default(autoincrement())
+  researchId      Int
+  research        Research @relation(fields: [researchId], references: [id], onDelete: Cascade)
+  title           String   @db.Text
+  authors         String   @db.Text
+  journal         String
+  year            Int
+  doi             String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([researchId, order])
+}
+
+
+// Teaching Departments
+model TeachingDepartment {
+  id              Int      @id @default(autoincrement())
+  name            String
+  color           String   @default("emerald") // emerald, sky, blue, etc.
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  courses         TeachingCourse[]
+
+  @@index([order])
+}
+
+// Teaching Courses
+model TeachingCourse {
+  id              Int                 @id @default(autoincrement())
+  departmentId    Int
+  department      TeachingDepartment  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  courseCode      String
+  courseName      String
+  courseType      String              // "Undergraduate", "Graduate", "Other"
+  order           Int                 @default(0)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([departmentId, order])
+}
+
+// Resume Profile
+model ResumeProfile {
+  id              Int      @id @default(autoincrement())
+  name            String
+  title           String
+  departments     String   @db.Text  // ADD THIS LINE
+  profileImage    String?
+  email           String
+  phone           String
+  websiteUrl      String
+  resumePDF       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+// Education
+model Education {
+  id              Int      @id @default(autoincrement())
+  degree          String
+  field           String
+  institution     String
+  year            String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Employment/Positions
+model Position {
+  id              Int      @id @default(autoincrement())
+  title           String
+  place           String
+  years           String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Research Interests
+model ResearchInterest {
+  id              Int      @id @default(autoincrement())
+  interest        String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Awards
+model Award {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Editorial Board
+model Editorial {
+  id              Int      @id @default(autoincrement())
+  journalTitle    String
+  publisher       String
+  since           String
+  impactFactor    String
+  journalImage    String?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Patents (UPDATE existing model)
+model Patent {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  inventors       String   @db.Text
+  patentNo        String
+  date            String?
+  status          String   // Published, Filed, Granted, etc.
+  patentType      String   @default("Indian") // "Indian" or "International"
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([patentType, order])
+}
+
+
+// Lab Profile (Principal Investigator)
+model LabProfile {
+  id              Int      @id @default(autoincrement())
+  name            String
+  title           String
+  photo           String?
+  description     String   @db.Text
+  email           String
+  url             String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Lab Carousel Images
+model LabCarouselImage {
+  id              Int      @id @default(autoincrement())
+  imageUrl        String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Lab Projects
+model LabProject {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  objective       String   @db.Text
+  keywords        String   // Comma-separated
+  imageUrl        String?
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// PhD Students (Current)
+model PhdStudent {
+  id              Int      @id @default(autoincrement())
+  name            String
+  title           String?  // e.g., "Senior Research Fellow"
+  field           String
+  photo           String?
+  isAlumni        Boolean  @default(false)
+  presentPosition String?  @db.Text
+  note            String?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([isAlumni, order])
+}
+
+// MTech Students
+model MtechStudent {
+  id              Int      @id @default(autoincrement())
+  name            String
+  branch          String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// BTech Students
+model BtechStudent {
+  id              Int      @id @default(autoincrement())
+  name            String
+  branch          String
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Books
+model Book {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  authors         String   @db.Text
+  isbn            String?
+  publisher       String
+  year            String?
+  links           String?  @db.Text // JSON string of links
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Book Chapters
+model BookChapter {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  authors         String   @db.Text
+  bookTitle       String   @db.Text
+  publisher       String
+  year            String?
+  isbn            String?
+  doi             String?
+  refNumber       Int?     // Reference number for citation
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+// Computational Tools
+model ComputationalTool {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  description     String   @db.Text
+  reference       String   @db.Text
+  imageUrl        String?  // ADD THIS LINE
+  url             String?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+
+
+// Outreach Activities
+model Outreach {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String   @db.Text
+  imageUrl        String?
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+
+// Site Settings (for navbar, footer, etc.)
+model SiteSettings {
+  id              Int      @id @default(autoincrement())
+  
+  // Navbar
+  logoUrl         String?
+  siteName        String   @default("Professor Portfolio")
+  
+  // Footer - Contact Info
+  footerName      String?
+  footerTitle     String?
+  footerEmail     String?
+  footerPhone     String?
+  footerOffice    String?
+  
+  // Footer - Social Links
+  linkedinUrl     String?
+  twitterUrl      String?
+  googleScholarUrl String?
+  researchGateUrl String?
+  githubUrl       String?
+  
+  // Footer - Bottom
+  copyrightText   String?  @db.Text
+  officialSiteUrl String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+
+// Admin Users
+model AdminUser {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  encryptedPassword String
+  role            String   @default("admin")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

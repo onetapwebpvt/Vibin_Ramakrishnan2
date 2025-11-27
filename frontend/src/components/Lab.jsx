@@ -1,83 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ProjectCard from "./Lab/ProjectCard";
-import StudentCard from "./Lab/StudentCard";
-
-// Example carousel images
-const projectImages = [
-  "https://fac.iitg.ac.in/vibin/img/dfb50b90491749a491845044b29baad9.jpeg",
-  "https://fac.iitg.ac.in/vibin/img/f55f590936d7618ed6f995c022ea9ef6.jpg",
-  "https://fac.iitg.ac.in/vibin/img/d566be3d113bb7a0f0ed023d81d0db01.jpg",
-  "https://fac.iitg.ac.in/vibin/img/1685c073cb852f912b9ce2e0dc09b194.jpg",
-];
-
-// Principal investigator data
-const piProfile = {
-  name: "Dr. Vibin Ramakrishnan",
-  title: "Principal Investigator",
-  photo: "https://www.iitg.ac.in/biotech/faculty/efcea3e7cb01341e611b1bb3337c0c91.jpg",
-  description: "Professor, Department of Biosciences & Bioengineering, IIT Guwahati. Vibin leads the Molecular Interactions & Design Laboratory, focusing on network medicine, drug delivery, bio-nanotechnology, and the mentoring of a vibrant team of young researchers.",
-  contact: {
-    email: "vibin@iitg.ac.in",
-    url: "https://fac.iitg.ac.in/vibin/"
-  }
-};
-
-const projects = [
-  {
-    title: "Mapping Drug-Target Interactions and Synergy in Traditional Multimolecular Immunomodulators",
-    objective: "Mapping drug target interactions of multi-molecular drug formulations.",
-    keywords: ["Network Medicine", "Computational Biology", "Biochemical Informatics", "Systems Biology"],
-    image: "/images/project1.jpg"
-  },
-  {
-    title: "Design of peptide-based stimulus responsive nano-catalyst",
-    objective: "Design, synthesize and characterize peptide based nano-materials for catalysis.",
-    keywords: ["Biophysics", "Bio-nanotechnology", "Bio-organic chemistry"],
-    image: "/images/project2.jpg"
-  },
-  {
-    title: "Design of peptide-based drug delivery vehicles against resistant cancer",
-    objective: "Design and functional characterization of drug delivery vehicles using in vitro and in vivo methods.",
-    keywords: ["Biophysics", "Bio-nanotechnology", "Cancer therapy"],
-    image: "/images/project3.jpg"
-  }
-];
-
-const currentPhdStudents = [
-  { name: "Yvonne Christian", title: "Senior Research Fellow", field: "Drug delivery vehicles",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Kalpana Kumari", title: "Prime Ministers Research Fellow", field: "Bio-nano catalysis",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Amay Sanjay Redkar", title: "Prime Ministers Research Fellow", field: "Network Medicine",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Mouli Sarkar", title: "Senior Research Fellow", field: "Network Medicine",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Naveen Kumar", title: "Prime Ministers Research Fellow", field: "Network Medicine",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Dikshita Hazarika", title: "Junior Research Fellow", field: "Drug delivery vehicles",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Kunal Das", title: "Junior Research Fellow", field: "Bionanotechnology, Bio-nano catalysis",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Sushmita Sen", title: "", field: "Network Medicine",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-];
-
-const graduatedPhdStudents = [
-  { name: "Prakash Kishore Hazam", field: "Peptide Antibiotics", presentPosition: "Academia Sinica Post Doctoral Fellow at Academia Sinica, Taiwan",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Arnish Chakaborty", field: "Infectious Diseases", presentPosition: "Co-Supervisor", note: "(Co-Supervisor)",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Gaurav Jerath", field: "Drug delivery vehicles", presentPosition: "Assistant Professor, Gujarat Biotech University, Gandhinagar & MD, Pepthera Laboratories Pvt. Ltd.",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Sajitha Sasidharan", field: "Functional Bio-nano assemblies", presentPosition: "oLife Post Doctoral Fellow, University of Groningen, Netherlands",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Gaurav Pandey", field: "Protein aggregation therapeutics", presentPosition: "Post Doctoral Fellow, SCRIPPS Research Institute, San Diego, CA, USA",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Debika Datta", field: "Protein Biophysics", presentPosition: "Post Doctoral Fellow, University of California at San Diego, CA, USA", note: "(Co-Supervisor)",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Ruchika Goyal", field: "Drug delivery vehicles", presentPosition: "Marie Curie Post Doctoral Fellow, University of Strathclyde, Glasgow, UK",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Sooram Banesh", field: "Biochemistry, Infectious Diseases", presentPosition: "Post Doctoral Fellow, University of California at San Diego, CA, USA", note: "(Co-Supervisor)",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Jahnu Saikia", field: "Functional Bio-nano assemblies", presentPosition: "Post Doctoral Fellow, Vanderbilt University, USA",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-  { name: "Vivek Prakash", field: "Functional Bio-nano assemblies", presentPosition: "Post Doctoral Fellow, Case Western Reserve University, Cleveland, Ohio, USA",photo:"https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" },
-];
-
-const mtechStudents = [
-  { name: "Amit Verma", branch: "Biotechnology" },
-  { name: "Sneha Reddy", branch: "Bioinformatics" },
-  // ...add more as needed
-];
-
-const btechStudents = [
-  { name: "Rahul Sharma", branch: "Biotechnology" },
-  { name: "Priya Sinha", branch: "Biosciences" },
-  // ...add more as needed
-];
 
 
 function SimpleStudentCard({ student }) {
@@ -89,60 +10,82 @@ function SimpleStudentCard({ student }) {
   );
 }
 
-
 function SimpleCarousel({ images }) {
   const [current, setCurrent] = useState(0);
   const size = images.length;
 
-  const goNext = () => setCurrent((current + 1) % size);
-  const goPrev = () => setCurrent((current - 1 + size) % size);
+  const goNext = () => setCurrent((prev) => (prev + 1) % size);
+  const goPrev = () => setCurrent((prev) => (prev - 1 + size) % size);
 
-  // Auto-rotate every 4 seconds (interval set up once)
   useEffect(() => {
+    if (size <= 1) return; // Don't auto-rotate if only 1 image
+    
     const interval = setInterval(goNext, 4000);
     return () => clearInterval(interval);
-  }, [size]);
+  }, [current, size]); // Add current to dependencies
+
+  if (size === 0) return null;
 
   return (
     <div className="w-full relative">
       <div className="flex items-center justify-center relative">
-        <button
-          onClick={goPrev}
-          aria-label="Previous"
-          className="text-gray-600 hover:text-blue-600 p-2 rounded-full bg-white shadow-md absolute left-2 z-10 top-1/2 -translate-y-1/2"
-        >
-          <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={2}><path d="M17 19l-7-7 7-7" /></svg>
-        </button>
+        {size > 1 && (
+          <button
+            onClick={goPrev}
+            aria-label="Previous"
+            className="text-gray-600 hover:text-blue-600 p-2 rounded-full bg-white shadow-md absolute left-2 z-10 top-1/2 -translate-y-1/2"
+          >
+            <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M17 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        
         <div className="mx-auto w-[31rem] md:w-[38rem] h-[23rem] md:h-[27rem] rounded-2xl overflow-hidden flex items-center bg-white shadow border border-blue-200 relative">
           <img
-            key={current}
+            key={current} // Add key to force re-render
             src={images[current]}
             alt={`Carousel image ${current + 1}`}
             className="object-contain w-full h-full animate-fadeIn"
           />
         </div>
-        <button
-          onClick={goNext}
-          aria-label="Next"
-          className="text-gray-600 hover:text-blue-600 p-2 rounded-full bg-white shadow-md absolute right-2 z-10 top-1/2 -translate-y-1/2"
-        >
-          <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={2}><path d="M11 5l7 7-7 7" /></svg>
-        </button>
+        
+        {size > 1 && (
+          <button
+            onClick={goNext}
+            aria-label="Next"
+            className="text-gray-600 hover:text-blue-600 p-2 rounded-full bg-white shadow-md absolute right-2 z-10 top-1/2 -translate-y-1/2"
+          >
+            <svg width={28} height={28} fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M11 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
       </div>
+      
       <div className="flex justify-center mt-3 space-x-2">
         {images.map((_, idx) => (
           <button
             key={idx}
-            className={`w-3 h-3 rounded-full border transition-all duration-300 ${current === idx ? "bg-blue-500 border-blue-500 scale-125" : "bg-gray-200 border-gray-300"}`}
+            className={`w-3 h-3 rounded-full border transition-all duration-300 ${
+              current === idx ? "bg-blue-500 border-blue-500 scale-125" : "bg-gray-200 border-gray-300"
+            }`}
             aria-label={`Go to slide ${idx + 1}`}
             onClick={() => setCurrent(idx)}
           />
         ))}
       </div>
+      
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from { 
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to { 
+            opacity: 1;
+            transform: scale(1);
+          }
         }
         .animate-fadeIn {
           animation: fadeIn 0.8s ease-in-out;
@@ -151,6 +94,7 @@ function SimpleCarousel({ images }) {
     </div>
   );
 }
+
 
 const PISection = ({ pi, images }) => (
   <section className="flex flex-col md:flex-row py-16 gap-10 items-center">
@@ -165,9 +109,9 @@ const PISection = ({ pi, images }) => (
       <p className="font-semibold text-lg text-blue-700">{pi.title}</p>
       <p className="text-gray-700">{pi.description}</p>
       <div className="flex gap-5 text-blue-800 mt-2">
-        <a href={`mailto:${pi.contact.email}`} className="hover:underline">{pi.contact.email}</a>
+        <a href={`mailto:${pi.email}`} className="hover:underline">{pi.email}</a>
         <span>•</span>
-        <a href={pi.contact.url} className="hover:underline" target="_blank" rel="noopener noreferrer">Profile</a>
+        <a href={pi.url} className="hover:underline" target="_blank" rel="noopener noreferrer">Profile</a>
       </div>
     </div>
     {/* Carousel */}
@@ -181,14 +125,15 @@ const ProjectSection = ({ projects }) => (
   <div className="space-y-20">
     {projects.map((project, index) => {
       const isImageLeft = index % 2 === 0;
+      const keywords = project.keywords ? project.keywords.split(',').map(k => k.trim()) : [];
       return (
         <div
-          key={index}
+          key={project.id}
           className={`flex flex-col md:flex-row ${isImageLeft ? "" : "md:flex-row-reverse"} gap-10 items-center`}
         >
           <div className="w-full md:w-1/2">
             <img
-              src={project.image}
+              src={project.imageUrl}
               alt={project.title}
               className="w-full h-72 object-cover rounded-2xl shadow-lg"
             />
@@ -197,7 +142,7 @@ const ProjectSection = ({ projects }) => (
             <h3 className="text-2xl font-bold text-blue-900">{project.title}</h3>
             <p className="text-gray-700 text-lg">{project.objective}</p>
             <div className="flex gap-2 flex-wrap">
-              {project.keywords.map((kw, ki) => (
+              {keywords.map((kw, ki) => (
                 <span key={ki} className="inline-block bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm font-semibold">{kw}</span>
               ))}
             </div>
@@ -217,7 +162,6 @@ function PhdStudentCard({ student }) {
         alt={student.name}
         className="absolute inset-0 w-full h-full object-cover object-top"
       />
-      {/* Overlay text at the bottom */}
       <div className="w-full z-10 p-5 pb-6 bg-gradient-to-t from-blue-600/90 via-blue-400/60 to-blue-300/10">
         <h3 className="text-2xl font-bold text-white mb-1 drop-shadow">{student.name}</h3>
         {student.title && (
@@ -229,12 +173,13 @@ function PhdStudentCard({ student }) {
         {student.presentPosition && (
           <p className="text-white/80 mt-2 text-sm">{student.presentPosition}</p>
         )}
+        {student.note && (
+          <p className="text-white/80 mt-1 text-xs">{student.note}</p>
+        )}
       </div>
     </div>
   );
 }
-
-
 
 function SectionHeader({ title, subtitle, accentColor }) {
   const accent = accentColor === "blue"
@@ -250,7 +195,74 @@ function SectionHeader({ title, subtitle, accentColor }) {
   );
 }
 
+
 function Lab() {
+  const [lab, setLab] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/lab')
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch lab data");
+        return res.json();
+      })
+      .then(data => {
+        setLab(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+        <span className="text-blue-800 font-bold text-xl animate-pulse">Loading MID Lab...</span>
+      </div>
+    );
+  }
+  
+  if (error || !lab) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+        <div className="text-center">
+          <span className="text-red-600">Error: {error || 'No data found'}</span>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 block mx-auto"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    profile,
+    carouselImages,
+    projects,
+    currentPhdStudents,
+    graduatedPhdStudents,
+    mtechStudents,
+    btechStudents
+  } = lab;
+
+  // Add safety checks
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+        <div className="text-center">
+          <p className="text-gray-600">No lab profile data available</p>
+          <p className="text-sm text-gray-500 mt-2">Please add lab profile in the admin panel</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-w-full bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
       {/* Hero Section */}
@@ -261,26 +273,34 @@ function Lab() {
           <div className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-semibold mb-4 border border-white/20">
             MID Lab @ IIT Guwahati
           </div>
-          <h1 className="text-6xl font-bold mb-4 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
             Molecular Interactions & Design Laboratory
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-blue-100 max-w-3xl leading-relaxed">
             Pioneering research in network medicine, drug delivery systems, and bio-nanotechnology to advance healthcare and therapeutic solutions.
           </p>
         </div>
       </div>
+      
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
         {/* PI + Carousel section */}
-        <PISection pi={piProfile} images={projectImages} />
+        <PISection
+          pi={profile}
+          images={carouselImages && carouselImages.length > 0 ? carouselImages.map(img => img.imageUrl) : []}
+        />
+        
         {/* Projects Section */}
-        <section className="mb-20">
-          <SectionHeader
-            title="Research Projects"
-            subtitle="Cutting-edge research initiatives driving innovation in molecular medicine"
-            accentColor="blue"
-          />
-          <ProjectSection projects={projects} />
-        </section>
+        {projects && projects.length > 0 && (
+          <section className="mb-20">
+            <SectionHeader
+              title="Research Projects"
+              subtitle="Cutting-edge research initiatives driving innovation in molecular medicine"
+              accentColor="blue"
+            />
+            <ProjectSection projects={projects} />
+          </section>
+        )}
+        
         {/* PhD Students */}
         <section>
           <div className="mb-8">
@@ -290,52 +310,61 @@ function Lab() {
               accentColor="purple"
             />
           </div>
+          
           {/* Current PhD Students */}
-          <div className="mb-16">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-  {currentPhdStudents.map((student, idx) => (
-    <PhdStudentCard student={student} key={idx} />
-  ))}
-</div>
-
-          </div>
+          {currentPhdStudents && currentPhdStudents.length > 0 && (
+            <div className="mb-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {currentPhdStudents.map((student, idx) => (
+                  <PhdStudentCard student={student} key={idx} />
+                ))}
+              </div>
+            </div>
+          )}
+          
           {/* Graduated PhD Students */}
-          <div className="mb-12">
-            <SectionHeader
-              title="Alumni"
-              subtitle="Meet our accomplished alumni"
-              accentColor="purple"
-            />
-          </div>
-          <div>
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-  {graduatedPhdStudents.map((student, idx) => (
-    <PhdStudentCard student={student} key={idx} />
-  ))}
-</div>
-
-          </div>
-
+          {graduatedPhdStudents && graduatedPhdStudents.length > 0 && (
+            <>
+              <div className="mb-12">
+                <SectionHeader
+                  title="MID Hall of Fame"
+                  subtitle="Meet our accomplished alumni"
+                  accentColor="purple"
+                />
+              </div>
+              <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {graduatedPhdStudents.map((student, idx) => (
+                    <PhdStudentCard student={student} key={idx} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+          
           {/* MTech Students */}
-<div className="mt-12 mb-12">
-  <h3 className="text-2xl font-bold text-blue-800 mb-6">MTech Students</h3>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-    {mtechStudents.map((student, idx) => (
-      <SimpleStudentCard student={student} key={idx} />
-    ))}
-  </div>
-</div>
-
-{/* BTech Students */}
-<div className="mb-12">
-  <h3 className="text-2xl font-bold text-blue-800 mb-6">BTech Students</h3>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
-    {btechStudents.map((student, idx) => (
-      <SimpleStudentCard student={student} key={idx} />
-    ))}
-  </div>
-</div>
-
+          {mtechStudents && mtechStudents.length > 0 && (
+            <div className="mt-12 mb-12">
+              <h3 className="text-2xl font-bold text-blue-800 mb-6">MTech Students</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+                {mtechStudents.map((student, idx) => (
+                  <SimpleStudentCard student={student} key={idx} />
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* BTech Students */}
+          {btechStudents && btechStudents.length > 0 && (
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-blue-800 mb-6">BTech Students</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+                {btechStudents.map((student, idx) => (
+                  <SimpleStudentCard student={student} key={idx} />
+                ))}
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </div>
@@ -343,3 +372,4 @@ function Lab() {
 }
 
 export default Lab;
+

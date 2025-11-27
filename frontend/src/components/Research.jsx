@@ -1,96 +1,4 @@
-import React from "react";
-
-// Sample research data structure - to be fetched from AdminJS backend
-const researchData = [
-  {
-    id: 1,
-    title: "Network Medicine",
-    description:
-      "Network medicine uses computational approaches to understand disease mechanisms and identify therapeutic targets through the analysis of molecular interaction networks. Our research focuses on developing novel algorithms for drug-target interaction mapping and multi-molecular therapeutic strategies.",
-    imageUrl: "/api/images/network-medicine.jpg", // AdminJS will provide this URL
-    publications: [
-      {
-        title:
-          "Mapping drug-target interactions and synergy in multi-molecular therapeutics for pressure-overload cardiac hypertrophy",
-        authors:
-          "Aparna Rai, Vikas Kumar, Gaurav Jerath, C. C. Kartha & Vibin Ramakrishnan",
-        journal: "npj Systems Biology and Applications",
-        year: "2021",
-        doi: "10.1038/s41540-021-00171-z",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Drug Delivery Vehicles",
-    description:
-      "Our research in drug delivery focuses on developing smart peptide-based nanostructures for targeted therapy. We explore syndiotactic peptides and stimulus-responsive materials for precise drug delivery to tumor sites and disease-affected areas.",
-    imageUrl: "/api/images/drug-delivery.jpg",
-    publications: [
-      {
-        title:
-          "Delivery of Small Molecules by Syndiotactic Peptides for Breast Cancer Therapy",
-        authors:
-          "Gaurav Jerath, Pramod Darvin, Yvonne Christian, Vishal Trivedi, T. R. Santhosh Kumar and Vibin Ramakrishnan",
-        journal: "Molecular Pharmaceutics",
-        year: "2022",
-        doi: "acs.molpharmaceut.2c00238",
-      },
-      {
-        title: "Syndiotactic Peptides for Targeted Delivery",
-        authors:
-          "Gaurav Jerath, Ruchika Goyal, Vishal Trivedi T.R. Santhoshkumar and Vibin Ramakrishnan",
-        journal: "Acta Biomaterialia",
-        year: "2019",
-        doi: "10.1016/j.actbio.2019.01.036",
-      },
-      {
-        title:
-          "Geometry Encoded Functional Programming of Tumor Homing Peptides for Targeted Drug Delivery",
-        authors:
-          "Ruchika Goyal, Gaurav Jerath, Akhil R., Aneesh Chandrasekharan, Eswara Rao Puppala, Srikanth Ponneganti, Anupam Sarma, V.G.M. Naidu, T. R. Santhoshkumar, and Vibin Ramakrishnanan",
-        journal: "Journal of Controlled Release",
-        year: "2021",
-        doi: "10.1016/j.jconrel.2021.03.0101",
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "Bio-nano Catalysis",
-    description:
-      "Bio-nano catalysis combines biological systems with nanotechnology to create efficient catalytic materials. Our work explores anisotropic ferromagnetic organic nanostructures and their applications in various biomedical and industrial processes.",
-    imageUrl: "/api/images/bio-nano.jpg",
-    publications: [
-      {
-        title: "Anisotropic Ferromagnetic Organic Nanoflowers",
-        authors:
-          "Sajitha Sasidharan, Sayandeep Ghosh, Rishi Sreedhar, Kalpana Kumari, Subhash Thota, and Vibin Ramakrishnanan",
-        journal: "Journal of Physical Chemistry C",
-        year: "2022",
-        doi: "10.1021/acs.jpcc.2c01462",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "Computational Biology",
-    description:
-      "Our computational biology research encompasses protein engineering, structure-based analysis, and the development of web-based tools for molecular modeling. We create accessible platforms for researchers to perform complex protein analysis and drug design studies.",
-    imageUrl: "/api/images/computational-bio.jpg",
-    publications: [
-      {
-        title:
-          "Electric Field Disrupts Amyloid Aggregation; Potential Non-invasive Therapy for Alzheimer's Disease",
-        authors:
-          "Jahnu Saikia, Gaurav Pandey, Sajitha Sasidharan, Ferrin Antony, Harshal B. Nemade, Sachin Kumar, Nitin Chaudhary, and Vibin Ramakrishnan",
-        journal: "ACS Chemical Neuroscience",
-        year: "2019",
-        doi: "10.1021/acschemneuro.8b00490",
-      },
-    ],
-  },
-];
+import React, { useState, useEffect } from "react";
 
 const ResearchCard = ({ research, index }) => {
   const isImageLeft = index % 2 === 0;
@@ -104,11 +12,21 @@ const ResearchCard = ({ research, index }) => {
       >
         <div className="w-full lg:w-1/2">
           <div className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-            <img
-              src={research.imageUrl}
-              alt={research.title}
-              className="w-full h-96 object-cover hover:scale-105 transition-transform duration-500"
-            />
+            {research.imageUrl ? (
+              <img
+                src={research.imageUrl}
+                alt={research.title}
+                className="w-full h-96 object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://via.placeholder.com/800x600?text=Research+Image';
+                }}
+              />
+            ) : (
+              <div className="w-full h-96 bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
+                <span className="text-4xl text-emerald-600 font-bold">{research.title.charAt(0)}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
         </div>
@@ -123,28 +41,30 @@ const ResearchCard = ({ research, index }) => {
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-2xl font-semibold text-gray-800 border-b-2 border-emerald-600 pb-2 inline-block">
-              Publications
-            </h3>
-            <ul className="space-y-4 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-200 scrollbar-track-transparent">
-              {research.publications.map((pub, pubIndex) => (
-                <li
-                  key={pubIndex}
-                  className="bg-gray-50 p-4 rounded-lg border-l-4 border-emerald-600 hover:bg-gray-100 transition-colors duration-200"
-                >
-                  <h4 className="font-semibold text-gray-900 mb-2">
-                    {pub.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-1">{pub.authors}</p>
-                  <p className="text-sm text-gray-500">
-                    <span className="font-medium">{pub.journal}</span> (
-                    {pub.year}) • DOI: {pub.doi}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {research.publications && research.publications.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold text-gray-800 border-b-2 border-emerald-600 pb-2 inline-block">
+                Publications
+              </h3>
+              <ul className="space-y-4 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-200 scrollbar-track-transparent">
+                {research.publications.map((pub) => (
+                  <li
+                    key={pub.id}
+                    className="bg-gray-50 p-4 rounded-lg border-l-4 border-emerald-600 hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    <h4 className="font-semibold text-gray-900 mb-2">
+                      {pub.title}
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-1">{pub.authors}</p>
+                    <p className="text-sm text-gray-500">
+                      <span className="font-medium">{pub.journal}</span> (
+                      {pub.year}) • DOI: {pub.doi}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -152,6 +72,67 @@ const ResearchCard = ({ research, index }) => {
 };
 
 function Research() {
+  const [researchData, setResearchData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/research')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch research data');
+        }
+        return res.json();
+      })
+      .then(data => {
+        setResearchData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching research data:', err);
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading research areas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
+        <div className="text-center">
+          <p className="text-red-600">Error: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (researchData.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
+        <div className="text-center">
+          <p className="text-gray-600">No research areas available</p>
+          <p className="text-sm text-gray-500 mt-2">Please add research data in the admin panel</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-w-full bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-8 py-16">
