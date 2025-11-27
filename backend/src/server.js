@@ -26,7 +26,7 @@ const start = async () => {
 
   // CORS Configuration
   const allowedOrigins = isProduction
-    ? [process.env.FRONTEND_URL]
+    ? [process.env.FRONTEND_URL, process.env.ADMIN_URL]
     : ['http://localhost:5173', 'http://localhost:3000'];
 
   app.use(cors({
