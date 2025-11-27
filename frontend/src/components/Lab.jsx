@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 
 function SimpleStudentCard({ student }) {
@@ -202,11 +203,7 @@ function Lab() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/lab')
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch lab data");
-        return res.json();
-      })
+    apiCall('/api/lab')
       .then(data => {
         setLab(data);
         setLoading(false);

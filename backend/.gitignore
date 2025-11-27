@@ -1,9 +1,31 @@
-/node_modules
-# Keep environment variables out of version control
+# Environment variables
 .env
+.env.local
+.env.production
 
-/generated/prisma
+# Dependencies
+node_modules/
 
-public/uploads/*
-!public/uploads/.gitkeep
+# AdminJS generated files
+.adminjs/
+.adminjs/.entry.js
 
+# Database files (if using SQLite locally)
+*.db
+*.sqlite
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

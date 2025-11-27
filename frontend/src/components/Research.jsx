@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 const ResearchCard = ({ research, index }) => {
   const isImageLeft = index % 2 === 0;
@@ -77,13 +78,7 @@ function Research() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/research')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch research data');
-        }
-        return res.json();
-      })
+    apiCall('/api/research')
       .then(data => {
         setResearchData(data);
         setLoading(false);

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 function About() {
   const [aboutData, setAboutData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/about')
-      .then(res => res.json())
+    apiCall('/api/about')
       .then(data => {
         setAboutData(data);
         setLoading(false);

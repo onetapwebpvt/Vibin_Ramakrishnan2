@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 const OutreachCard = ({ outreach, index }) => {
   const isImageLeft = index % 2 === 0;
@@ -54,13 +55,7 @@ function Outreach() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/outreach')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch outreach data');
-        }
-        return res.json();
-      })
+    apiCall('/api/outreach')
       .then(data => {
         setOutreachData(data);
         setLoading(false);

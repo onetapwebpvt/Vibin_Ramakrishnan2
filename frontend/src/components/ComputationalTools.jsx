@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 function ToolCard({ tool, rightImage = false }) {
   return (
@@ -59,11 +60,7 @@ function ComputationalToolsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/computational-tools')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch computational tools');
-        return res.json();
-      })
+    apiCall('/api/computational-tools')
       .then(data => {
         setTools(data);
         setLoading(false);

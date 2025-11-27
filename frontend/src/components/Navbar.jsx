@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import DefaultLogo from "../assets/iitg_logo.jpg";
+import { apiCall } from "../config/api";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState(DefaultLogo);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/site-settings')
-      .then(res => res.json())
+    apiCall('/api/site-settings')
       .then(data => {
         if (data && data.logoUrl) {
           setLogoUrl(data.logoUrl);

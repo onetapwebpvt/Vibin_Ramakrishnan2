@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 function News() {
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/news')
-      .then(res => res.json())
+    apiCall('/api/news')
       .then(data => {
         setNewsItems(data);
         setLoading(false);

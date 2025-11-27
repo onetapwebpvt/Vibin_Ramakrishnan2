@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 function PublicationsSection({ publications }) {
   if (!publications || publications.length === 0) {
@@ -148,11 +149,7 @@ function PublicationsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/publications-page')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch publications data');
-        return res.json();
-      })
+    apiCall('/api/publications-page')
       .then(result => {
         setData(result);
         setLoading(false);

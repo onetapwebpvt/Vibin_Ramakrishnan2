@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ContactInfo from "./Footer/ContactInfo";
 import SocialLinks from "./Footer/SocialLinks";
+import { apiCall } from "../config/api";
 
 function Footer() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/site-settings')
-      .then(res => res.json())
+    apiCall('/api/site-settings')
       .then(data => {
         console.log('Footer received settings:', data);
         setSettings(data);

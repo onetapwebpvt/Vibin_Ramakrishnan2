@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 const Teaching = () => {
   const [teachingData, setTeachingData] = useState([]);
@@ -6,11 +7,7 @@ const Teaching = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/teaching')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch teaching data');
-        return res.json();
-      })
+    apiCall('/api/teaching')
       .then(data => {
         setTeachingData(data);
         setLoading(false);

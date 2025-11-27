@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 function Publications() {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/publications')
-      .then(res => res.json())
+    apiCall('/api/publications')
       .then(data => {
         setPublications(data);
         setLoading(false);

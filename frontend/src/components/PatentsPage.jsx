@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiCall } from "../config/api";
 
 // Helpers
 const StatusBadge = ({ status }) => {
@@ -42,11 +43,7 @@ function PatentsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/patents-page')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch patents data');
-        return res.json();
-      })
+    apiCall('/api/patents-page')
       .then(result => {
         setData(result);
         setLoading(false);
