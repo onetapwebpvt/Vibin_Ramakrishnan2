@@ -17,7 +17,7 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <main className="min-h-screen">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/research" element={<Research />} />

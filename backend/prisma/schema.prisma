@@ -50,6 +50,22 @@ model Publication {
   @@index([year, order])
 }
 
+model PublicationPage {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.Text
+  authors         String   @db.Text
+  venue           String
+  year            Int
+  doi             String
+  publisher       String
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([year, order])
+}
+
 // News Items
 model News {
   id              Int      @id @default(autoincrement())

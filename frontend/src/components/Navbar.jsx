@@ -35,11 +35,11 @@ function Navbar() {
 
   return (
     <nav className="w-full px-4 md:px-8 py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-200 z-50 relative">
-      <div className="flex items-center h-14">
+      <div className="flex items-center h-14 lg:h-20">
         <img
           src={logoUrl}
           alt="Logo"
-          className="h-full w-auto max-w-[300px] object-contain"
+          className="h-full w-auto max-w-[400px] object-contain"
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = DefaultLogo; // Fallback to default logo
@@ -49,7 +49,7 @@ function Navbar() {
       
       {/* Hamburger mobile menu button */}
       <button
-        className="ml-auto md:hidden p-2 text-gray-700 focus:outline-none"
+        className="ml-auto lg:hidden p-2 text-gray-700 focus:outline-none"
         aria-label="Toggle Navigation"
         onClick={() => setMenuOpen((o) => !o)}
       >
@@ -80,7 +80,7 @@ function Navbar() {
       </button>
       
       {/* Desktop Nav */}
-      <div className="hidden md:flex gap-8 items-center">
+      <div className="hidden lg:flex gap-8 items-center">
         {navLinks.map((link) => (
           <Link
             key={link.to}

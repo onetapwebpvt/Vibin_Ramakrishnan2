@@ -9,7 +9,7 @@ function Home() {
     <div>
       <Hero />
       <About />
-      <div className="max-w-350 mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      <div className="min-w-full mx-auto px-20 py-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <Publications />
         <News />
       </div>

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import SubHero from "./SubHero";
 import { apiCall } from "../config/api";
 
+
 function Hero() {
   const [heroData, setHeroData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     apiCall('/api/hero')
@@ -20,6 +22,7 @@ function Hero() {
       });
   }, []);
 
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
@@ -30,6 +33,7 @@ function Hero() {
       </div>
     );
   }
+
 
   if (error) {
     return (
@@ -47,6 +51,7 @@ function Hero() {
     );
   }
 
+
   if (!heroData || !heroData.name) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
@@ -58,10 +63,12 @@ function Hero() {
     );
   }
 
+
   // Split comma-separated departments
   const departmentsList = heroData.departments 
     ? heroData.departments.split(',').map(d => d.trim()).filter(d => d.length > 0)
     : [];
+
 
   return (
     <div className="min-w-full bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
@@ -179,10 +186,10 @@ function Hero() {
           </div>
         </div>
       </div>
-
       <SubHero />
     </div>
   );
 }
+
 
 export default Hero;

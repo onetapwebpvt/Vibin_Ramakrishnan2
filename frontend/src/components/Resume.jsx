@@ -64,11 +64,11 @@ const Resume = () => {
   const { profile, education, positions, researchInterests, awards, editorials, patents, selectedPublications } = resumeData;
 
   return (
-    <div className="w-full bg-white min-h-screen">
+    <div className="w-full flex justify-center bg-white min-h-screen">
       <div className="max-w-4xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8">
         
         {/* Hero Section - Responsive */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 md:gap-10 mb-8 md:mb-10 pb-6 md:pb-8 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:items-start gap-6 sm:gap-8 md:gap-10 mb-8 md:mb-10 pb-6 md:pb-8 border-b border-gray-200">
           
           {/* Profile Image */}
           <div className="flex-shrink-0">
@@ -246,7 +246,7 @@ const Resume = () => {
         {/* Selected Publications */}
         {selectedPublications && selectedPublications.length > 0 && (
           <div className="mb-8 md:mb-10">
-            <SectionHeading>Selected Publications</SectionHeading>
+            <SectionHeading>Publications</SectionHeading>
             <div className="space-y-6 sm:space-y-8">
               {selectedPublications.map(pub => (
                 <div key={pub.id} className="border-l-4 border-blue-500 pl-3 sm:pl-4 md:pl-5">

@@ -9,6 +9,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { prisma, resources } from './admin/admin.config.js';
 import { upload } from './middleware/upload.js';
+import { excelUpload } from './middleware/excelUpload.js';
+import xlsx from 'xlsx';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -334,7 +337,7 @@ const start = async () => {
   app.get('/api/publications-page', async (req, res) => {
     try {
       const [publications, books, bookChapters] = await Promise.all([
-        prisma.publication.findMany({
+        prisma.publicationPage.findMany({
           where: { isVisible: true },
           orderBy: [{ year: 'desc' }, { order: 'asc' }]
         }),

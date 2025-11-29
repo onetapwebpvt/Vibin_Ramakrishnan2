@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { apiCall } from "../config/api";
 
+
 const ResearchCard = ({ research, index }) => {
   const isImageLeft = index % 2 === 0;
+
 
   return (
     <div className="mb-20">
@@ -32,6 +34,7 @@ const ResearchCard = ({ research, index }) => {
           </div>
         </div>
 
+
         <div className="w-full lg:w-1/2 space-y-6">
           <div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -41,6 +44,7 @@ const ResearchCard = ({ research, index }) => {
               {research.description}
             </p>
           </div>
+
 
           {research.publications && research.publications.length > 0 && (
             <div className="space-y-4">
@@ -72,10 +76,12 @@ const ResearchCard = ({ research, index }) => {
   );
 };
 
+
 function Research() {
   const [researchData, setResearchData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     apiCall('/api/research')
@@ -90,6 +96,7 @@ function Research() {
       });
   }, []);
 
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
@@ -100,6 +107,7 @@ function Research() {
       </div>
     );
   }
+
 
   if (error) {
     return (
@@ -117,6 +125,7 @@ function Research() {
     );
   }
 
+
   if (researchData.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
@@ -128,9 +137,10 @@ function Research() {
     );
   }
 
+
   return (
-    <div className="min-w-full bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
-      <div className="max-w-7xl mx-auto px-8 py-16">
+    <div className="min-w-full bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 pb-0">
+      <div className="max-w-7xl mx-auto px-8 pt-16 pb-16">
         {researchData.map((research, index) => (
           <ResearchCard key={research.id} research={research} index={index} />
         ))}
@@ -138,5 +148,6 @@ function Research() {
     </div>
   );
 }
+
 
 export default Research;

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk Publications Upload</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+      max-width: 800px;
+      width: 100%;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    .instructions {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .instructions h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .instructions ol {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+    .instructions code {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+    }
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+    .file-input-label {
+      display: block;
+      padding: 20px;
+      background: #f8f9fa;
+      border: 2px dashed #667eea;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .file-input-label:hover {
+      background: #e7f1ff;
+      border-color: #5568d3;
+    }
+    .file-name {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e7f1ff;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #667eea;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+    .success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    .error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    .template-download {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    .template-download:hover {
+      background: #218838;
+    }
+    .progress {
+      display: none;
+      margin-top: 15px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e9ecef;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bulk Publications Upload</h1>
+    <p class="subtitle">Upload Excel or CSV file to add multiple publications at once</p>
+
+    <div class="section">
+      <div class="section-title"> Instructions</div>
+      <div class="instructions">
+        <h3>Excel/CSV Format Required:</h3>
+        <ol>
+          <li>Create an Excel (.xlsx) or CSV file</li>
+          <li>First row must be headers (column names)</li>
+          <li><strong>Required columns:</strong>
+            <ul style="margin-top: 5px;">
+              <li><code>title</code> - Publication title</li>
+              <li><code>authors</code> - Authors (comma-separated)</li>
+              <li><code>venue</code> - Journal/Conference name</li>
+              <li><code>year</code> - Publication year (number)</li>
+              <li><code>doi</code> - DOI number</li>
+              <li><code>publisher</code> - Publisher name</li>
+            </ul>
+          </li>
+          <li><strong>Optional columns:</strong> <code>order</code> (number), <code>isVisible</code> (true/false)</li>
+          <li>Save and upload the file below</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Upload File</div>
+      <form id="uploadForm">
+        <div class="file-input-wrapper">
+          <input type="file" id="fileInput" name="file" accept=".xlsx,.xls,.csv" required>
+          <label for="fileInput" class="file-input-label">
+            <span style="font-size: 48px;">📄</span><br>
+            <span style="font-size: 16px; font-weight: 600;">Click to select Excel/CSV file</span><br>
+            <span style="font-size: 12px; color: #888;">Supports .xlsx, .xls, .csv (max 10MB)</span>
+          </label>
+        </div>
+        <div id="fileName" class="file-name" style="display: none;"></div>
+        <div class="progress" id="progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">Uploading...</div>
+          </div>
+        </div>
+        <button type="submit" id="uploadBtn" style="margin-top: 20px;">
+          Upload Publications
+        </button>
+      </form>
+      <div id="result"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Sample Template</div>
+      <p style="margin-bottom: 10px; color: #666;">Download a sample Excel template to see the correct format:</p>
+      <a href="#" class="template-download" onclick="downloadTemplate(); return false;">
+        Download Template
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const result = document.getElementById('result');
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progressFill');
+
+    fileInput.addEventListener('change', function(e) {
+      if (e.target.files.length > 0) {
+        fileName.textContent = 'Selected: ' + e.target.files[0].name;
+        fileName.style.display = 'block';
+      }
+    });
+
+    uploadForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Uploading...';
+      result.style.display = 'none';
+      progress.style.display = 'block';
+      progressFill.style.width = '50%';
+
+      try {
+        const response = await fetch('/api/publications/bulk-upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        
+        progressFill.style.width = '100%';
+        setTimeout(() => {
+          progress.style.display = 'none';
+          
+          if (response.ok) {
+            result.className = 'success';
+            result.innerHTML = `
+              <strong> Upload Successful!</strong><br>
+              Total Processed: ${data.total}<br>
+              Success: ${data.results.success}<br>
+              Failed: ${data.results.failed}
+              ${data.results.errors.length > 0 ? '<br><br><strong>Errors:</strong><br>' + 
+                data.results.errors.map(e => `Row ${e.row}: ${e.error}`).join('<br>') : ''}
+            `;
+          } else {
+            result.className = 'error';
+            result.innerHTML = `<strong> Error:</strong><br>${data.error || 'Upload failed'}`;
+          }
+          result.style.display = 'block';
+        }, 500);
+      } catch (error) {
+        progress.style.display = 'none';
+        result.className = 'error';
+        result.innerHTML = `<strong> Error:</strong><br>${error.message}`;
+        result.style.display = 'block';
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = 'Upload Publications';
+      }
+    });
+
+    function downloadTemplate() {
+      const csv = `title,authors,venue,year,doi,publisher,order,isVisible
+"Machine Learning in Bioinformatics: A Review","John Doe, Jane Smith","Nature Biotechnology",2024,"10.1038/nbt.1234","Nature Publishing Group",1,true
+"Deep Learning for Drug Discovery","Alice Johnson, Bob Williams","Science",2023,"10.1126/science.5678","AAAS",2,true
+"Computational Biology Approaches","Carol Martinez, David Brown","Cell",2024,"10.1016/j.cell.9012","Elsevier",3,true`;
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'publications_template.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
